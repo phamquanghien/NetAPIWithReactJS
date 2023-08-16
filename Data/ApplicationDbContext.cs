@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using NetAPIWithReactJS.Models;
+
 namespace NetAPIWithReactJS.Data
 {
     public class ApplicationDbContext : DbContext
@@ -12,6 +14,6 @@ namespace NetAPIWithReactJS.Data
         {
         }
 
-        //public DbSet<Person> Person { get; set; } = default!;
+        public DbSet<Person> Person { get; set; } = default!;
     }
 }
