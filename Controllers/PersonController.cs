@@ -10,7 +10,7 @@ using NetAPIWithReactJS.Models;
 
 namespace NetAPIWithReactJS.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class PersonController : ControllerBase
     {
