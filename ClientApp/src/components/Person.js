@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 export class Person extends Component {
-  static displayName = Person.name;
 
   constructor(props) {
     super(props);
@@ -14,29 +13,28 @@ export class Person extends Component {
 
   static renderPersonsTable(persons) {
     return (
-      <table className="table table-striped">
+      <table className="table table-striped" aria-labelledby="tableLabel">
         <thead>
           <tr>
             <th>PersonID</th>
-            <th>Full name</th>
+            <th>PersonName</th>
             <th>Address</th>
             <th>Age</th>
           </tr>
         </thead>
         <tbody>
-            {persons.map(person =>
-                <tr key={person.PersonId}>
-                    <td>{person.PersonId}</td>
-                    <td>{person.PersonName}</td>
-                    <td>{person.Address}</td>
-                    <td>{person.Age}</td>
-                </tr>
-            )}
+          {persons.map(ps =>
+            <tr key={ps.personId}>
+              <td>{ps.personId}</td>
+              <td>{ps.personName}</td>
+              <td>{ps.address}</td>
+              <td>{ps.age}</td>
+            </tr>
+          )}
         </tbody>
       </table>
     );
   }
-
   render() {
     let contents = this.state.loading
       ? <p><em>Loading...</em></p>
@@ -44,7 +42,8 @@ export class Person extends Component {
 
     return (
       <div>
-        <h1 id="tableLabel">Person</h1>
+        <h1 id="tableLabel">Person List</h1>
+        <p>This component demonstrates fetching data from the server.</p>
         {contents}
       </div>
     );
