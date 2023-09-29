@@ -15,5 +15,7 @@ namespace NetAPIWithReactJS.Data
         }
 
         public DbSet<Person> Person { get; set; } = default!;
+
+        public DbSet<Student> Student { get; set; } = default!;
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetAPIWithReactJS.Data;
 using NetAPIWithReactJS.Models;
+using NetAPIWithReactJS.Models.Process;
 
 namespace NetAPIWithReactJS.Controllers
 {
@@ -15,13 +16,14 @@ namespace NetAPIWithReactJS.Controllers
     public class PersonController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
+        private StringProcess _strPro = new StringProcess();
         public PersonController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // GET: api/Person
+        // [HttpGet("/get-all-person")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Person>>> GetPerson()
         {
@@ -29,7 +31,7 @@ namespace NetAPIWithReactJS.Controllers
           {
               return NotFound();
           }
-            return await _context.Person.ToListAsync();
+            return await _context.Person.ToArrayAsync();
         }
 
         // GET: api/Person/5
@@ -86,28 +88,32 @@ namespace NetAPIWithReactJS.Controllers
         [HttpPost]
         public async Task<ActionResult<Person>> PostPerson(Person person)
         {
-          if (_context.Person == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Person'  is null.");
-          }
-            _context.Person.Add(person);
-            try
+            if (_context.Person == null)
             {
-                await _context.SaveChangesAsync();
+                return Problem("Entity set 'ApplicationDbContext.Person'  is null.");
             }
-            catch (DbUpdateException)
+            person.PersonId = _strPro.ProcessWhiteSpace(person.PersonId);
+            if(ModelState.IsValid)
             {
-                if (PersonExists(person.PersonId))
+                _context.Person.Add(person);
+                try
                 {
-                    return Conflict();
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateException)
                 {
-                    throw;
+                    if (PersonExists(person.PersonId))
+                    {
+                        return Conflict();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return CreatedAtAction("GetPerson", new { id = person.PersonId }, person);
             }
-
-            return CreatedAtAction("GetPerson", new { id = person.PersonId }, person);
+            return NoContent();
         }
 
         // DELETE: api/Person/5
