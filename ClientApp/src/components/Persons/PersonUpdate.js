@@ -1,41 +1,51 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
+function PersonUpdate({isOpen}) {
+    // const [personId, setPersonId] = useState("");
+    // const [personName, setPersonName] = useState("");
+    // const [address, setAddress] = useState("");
+    // const [age, setAge] = useState("");
+    const [person, setPerson] = useState({personId:"", personName:"", address:"", age:0});
+    const [modal, setModal] = useState(isOpen);
+    const toggle = () => setModal(!modal);
 
-export class PersonUpdate extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            personId: "",
-            personName: "",
-            address: "",
-            age: null
-          };
+    const handleSubmit = () => {
+        try {
+            axios.put("person/" + person.personId, person);
+            alert("Create successful person!");
+        } catch(err) {
+            alert(err);
+        }
+        toggle();
     }
-    render() { 
-        return ( 
-            <div>
-                <div class="modal" id="updatePerson">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form>
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Update Person</h4>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <input name='personId' value={this.state.personId} onChange={this.onInputchange} type='text' className='form-control' placeholder='Enter PersonID'></input><br></br>
-                                    <input name='personName' value={this.state.personName} onChange={this.onInputchange} type='text' className='form-control' placeholder='Enter Person Name'></input><br></br>
-                                    <input name='address' value={this.state.address} onChange={this.onInputchange} type='text' className='form-control' placeholder='Enter Address'></input><br></br>
-                                    <input name='age' value={this.state.age} onChange={this.onInputchange} type='number' className='form-control' placeholder='Enter Age'></input><br></br>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" onClick={this.onSubmit} class="btn btn-success">Save</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-         );
+    const handleInputChange = (e) => {
+        setPerson({...person, [e.target.name]: e.target.value});
     }
+    return (
+        <div>
+            <form>
+                <Modal isOpen={modal} toggle={toggle}>
+                    <ModalHeader className='w3-blue' toggle={toggle}>Update Person</ModalHeader>
+                    <ModalBody>
+                    <Input name='personId' className='my-3' value={person.personId} onChange={handleInputChange} type='text' placeholder='Enter PersonID'></Input>
+                        <Input name='personName'className='my-3' value={person.personName} onChange={handleInputChange} type='text' placeholder='Enter Person name'></Input>
+                        <Input name='address'className='my-3' value={person.address} onChange={handleInputChange} type='text' placeholder='Enter Address'></Input>
+                        <Input name='age'className='my-3' value={person.age} onChange={handleInputChange} type='number' placeholder='Enter Age'></Input>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={toggle}>
+                            Cancel
+                        </Button>
+                        <Button color="primary" onClick={handleSubmit}>
+                            Save Change
+                        </Button>
+                    </ModalFooter>
+                </Modal>
+            </form>
+            
+        </div>
+      );
+    
 }
+export default PersonUpdate;

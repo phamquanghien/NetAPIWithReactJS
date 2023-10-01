@@ -1,28 +1,31 @@
-function StudentDelete({stdID, fName, dc})
-{
-    return ( 
+import React from 'react';
+import axios from 'axios';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label } from 'reactstrap';
+const StudentDelete = (props) =>{
+    const handleSubmit = () => {
+        try {
+            axios.delete("student/" + props.getData.studentID);
+            props.refreshData();
+            props.close();
+            alert("Delete successful person!");
+        } catch(err) {
+            alert(err);
+        }
+    }
+    return(
         <div>
-            <div class="modal" id="deleteStudent">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form>
-                            <div class="modal-header">
-                                <h4 class="modal-title">Delete Student</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <label>Student id: {stdID}</label><br></br>
-                                <label>Full name: {fName}</label><br></br>
-                                <label>Address: {dc}</label><br></br>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-success">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <Modal isOpen={props.isOpen} >
+                <ModalHeader>Are your sure to delete this Student?</ModalHeader>
+                <ModalBody>
+                    <Label>StudentID: <b>{props.getData.studentID}</b></Label><br></br>
+                    <Label>FullName: <b>{props.getData.fullName}</b> </Label><br></br>
+                    <Label>Address: <b>{props.getData.address}</b></Label><br></br>
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="secondary" onClick={props.close}>Cancel</Button>
+                    <Button color="primary" onClick={handleSubmit}>Delete</Button>
+                </ModalFooter>
+            </Modal>
         </div>
     );
 }

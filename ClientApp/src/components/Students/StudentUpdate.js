@@ -1,45 +1,36 @@
-import { useState, useEffect } from "react";
-function StudentUpdate({stdID, fName, dc})
-{
-    const [studentID, setStudentID] = useState("");
-    const [fullName, setFullName] = useState("");
-    const [address, setAddress] = useState("");
-    useEffect(() => {
-        (async () => await setStudentValue())();
-    });
-    async function setStudentValue()
-    {
-        setStudentID(stdID);
-        setFullName(fName);
-        setAddress(dc);
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
+const StudentUpdate = (props) =>{
+    const [student, setStudent] = useState({});
+    
+    const handleSubmit = () => {
+        try {
+            axios.post("student", student);
+            props.refreshData();
+            alert("Create successful person!");
+        } catch(err) {
+            alert(err);
+        }
     }
-    async function updateStudent()
-    {
-        alert(studentID + "-" + fullName + "-" + address);
+    const handleInputChange = (e) => {
+        setStudent({...student, [e.target.name]: e.target.value});
     }
-    return ( 
+    console.log('Check props: ', props)
+    return(
         <div>
-            <div class="modal" id="updateStudent">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form>
-                            <div class="modal-header">
-                                <h4 class="modal-title">Update Student</h4>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <input name='studentID' value={studentID} onChange={(event) => { setStudentID(event.target.value); }} type='text' className='form-control' placeholder='Enter PersonID'></input><br></br>
-                                <input name='fullName' value={fullName} onChange={(event) => { setFullName(event.target.value); }} type='text' className='form-control' placeholder='Enter Person Name'></input><br></br>
-                                <input name='address' value={address} onChange={(event) => { setAddress(event.target.value); }} type='text' className='form-control' placeholder='Enter Address'></input><br></br>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-success" onClick={updateStudent}>Save</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <Modal isOpen={props.isOpen} >
+                <ModalHeader>Edit Student</ModalHeader>
+                <ModalBody>
+                    <Input name='studentID' className='my-3' value={student.studentID} onChange={handleInputChange} type='text' placeholder='Enter PersonID'></Input>
+                    <Input name='fullName' className='my-3' value={student.fullName} onChange={handleInputChange} type='text' placeholder='Enter Person name'></Input>
+                    <Input name='address' className='my-3' value={student.address} onChange={handleInputChange} type='text' placeholder='Enter Address'></Input>
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="secondary" onClick={props.close}>Cancel</Button>
+                    <Button color="primary" onClick={handleSubmit}>Save</Button>
+                </ModalFooter>
+            </Modal>
         </div>
     );
 }

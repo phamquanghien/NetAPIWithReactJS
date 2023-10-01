@@ -1,8 +1,8 @@
 import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
 import { Home } from "./components/Home";
-import { PersonRead } from "./components/Persons/PersonRead";
-import StudentRead from "./components/Students/StudentRead";
+import PersonRead from "./components/Persons/PersonRead";
+import Student from "./components/Students/Student";
 const AppRoutes = [
   {
     index: true,
@@ -22,7 +22,7 @@ const AppRoutes = [
   },
   {
     path: '/sinh-vien',
-    element: <StudentRead />
+    element: <Student />
   }
 ];
 
