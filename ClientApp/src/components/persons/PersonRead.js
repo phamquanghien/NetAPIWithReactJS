@@ -3,11 +3,13 @@ import axios from 'axios';
 import { Button, Table } from 'reactstrap';
 import PersonCreate from './PersonCreate';
 import PersonDelete from './PersonDelete';
+import PersonUpdate from './PersonUpdate';
 function PersonRead() {
     const [persons, setPersons] = useState([]);
     const [person, setPerson] = useState({});
     const [showPersonCreate, setShowPersonCreate] = useState(false);
     const [showPersonDelete, setShowPersonDelete] = useState(false);
+    const [showPersonUpdate, setShowPersonUpdate] = useState(false);
     useEffect(() => {
         (async() => getAllPerson())()
     },[]);
@@ -19,6 +21,10 @@ function PersonRead() {
         setShowPersonDelete(true);
         setPerson(ps);
     }
+    const handlePersonUpdate = (ps) => {
+        setShowPersonUpdate(true);
+        setPerson(ps);
+    }
     return(
         <div>
             <div>
@@ -28,6 +34,10 @@ function PersonRead() {
                     {
                         showPersonDelete &&
                         <PersonDelete isOpen={showPersonDelete} close={() => setShowPersonDelete(false)} refreshData = {() => getAllPerson()} getData={person}/>
+                    }
+                    {
+                        showPersonUpdate &&
+                        <PersonUpdate isOpen={showPersonUpdate} close={() => setShowPersonUpdate(false)} refreshData = {() => getAllPerson()} getData={person}/>
                     }
                 </h2>
                 <hr></hr>
@@ -47,7 +57,7 @@ function PersonRead() {
                                 <td>{ps.personID}</td>
                                 <td>{ps.fullName}</td>
                                 <td>
-                                <button type="button" className="w3-button w3-small w3-circle w3-ripple w3-white w3-border w3-border-blue"><i className="fa fa-edit w3-small"></i></button> | <button type="button" className="w3-button w3-small w3-circle w3-ripple w3-white w3-border w3-border-red" onClick={() => handlePersonDelete(ps)}><i className="fa fa-trash w3-small"></i></button>
+                                <button type="button" className="w3-button w3-small w3-circle w3-ripple w3-white w3-border w3-border-blue" onClick={() => handlePersonUpdate(ps)}><i className="fa fa-edit w3-small"></i></button> | <button type="button" className="w3-button w3-small w3-circle w3-ripple w3-white w3-border w3-border-red" onClick={() => handlePersonDelete(ps)}><i className="fa fa-trash w3-small"></i></button>
                                 </td>
                             </tr>
                         )
