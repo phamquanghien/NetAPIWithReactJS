@@ -86,28 +86,34 @@ namespace NetAPIWithReactJS.Controllers
         [HttpPost]
         public async Task<ActionResult<Person>> PostPerson(Person person)
         {
-          if (_context.Person == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Person'  is null.");
-          }
-            _context.Person.Add(person);
-            try
+            if (_context.Person == null)
             {
-                await _context.SaveChangesAsync();
+                return Problem("Entity set 'ApplicationDbContext.Person'  is null.");
             }
-            catch (DbUpdateException)
+            if(ModelState.IsValid)
             {
-                if (PersonExists(person.PersonID))
+                _context.Person.Add(person);
+                try
                 {
-                    return Conflict();
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateException)
                 {
-                    throw;
+                    if (PersonExists(person.PersonID))
+                    {
+                        return Conflict();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
-            }
 
-            return CreatedAtAction("GetPerson", new { id = person.PersonID }, person);
+                return CreatedAtAction("GetPerson", new { id = person.PersonID }, person);
+            } else {
+                return Problem("Du lieu dau vao khong hop le");
+            }
+            
         }
 
         // DELETE: api/Person/5
