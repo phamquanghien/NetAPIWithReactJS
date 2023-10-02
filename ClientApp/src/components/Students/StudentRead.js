@@ -33,8 +33,14 @@ function StudentRead(){
                     Student list
                     <Button className="w3-right" color="primary" outline onClick={() => setShowStudentCreate(true)}><i className="fa fa-plus"></i> Add new</Button>
                     <StudentCreate isOpen={showStudentCreate} close={() => setShowStudentCreate(false)} refreshData = {() => getAllStudent()}/>
-                    <StudentUpdate isOpen={showStudentUpdate} close={() => setShowStudentUpdate(false)} refreshData = {() => getAllStudent()} getData={student}/>
-                    <StudentDelete isOpen={showStudentDelete} close={() => setShowStudentDelete(false)} refreshData = {() => getAllStudent()} getData={student}/>
+                    {
+                        showStudentUpdate &&
+                        <StudentUpdate isOpen={showStudentUpdate} close={() => setShowStudentUpdate(false)} refreshData = {() => getAllStudent()} getData={student}/>
+                    }
+                    {
+                        showStudentDelete &&
+                        <StudentDelete isOpen={showStudentDelete} close={() => setShowStudentDelete(false)} refreshData = {() => getAllStudent()} getData={student}/>
+                    }
                 </h2>
                 
             </div>

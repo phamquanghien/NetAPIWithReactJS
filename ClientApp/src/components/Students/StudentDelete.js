@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label } from 'reactstrap';
 const StudentDelete = (props) =>{
+    const [student] = useState(props.getData);
     const handleSubmit = () => {
         try {
             axios.delete("student/" + props.getData.studentID);
@@ -17,9 +18,9 @@ const StudentDelete = (props) =>{
             <Modal isOpen={props.isOpen} >
                 <ModalHeader>Are your sure to delete this Student?</ModalHeader>
                 <ModalBody>
-                    <Label>StudentID: <b>{props.getData.studentID}</b></Label><br></br>
-                    <Label>FullName: <b>{props.getData.fullName}</b> </Label><br></br>
-                    <Label>Address: <b>{props.getData.address}</b></Label><br></br>
+                    <Label>StudentID: <b>{student.studentID}</b></Label><br></br>
+                    <Label>FullName: <b>{student.fullName}</b> </Label><br></br>
+                    <Label>Address: <b>{student.address}</b></Label><br></br>
                 </ModalBody>
                 <ModalFooter>
                     <Button color="secondary" onClick={props.close}>Cancel</Button>
